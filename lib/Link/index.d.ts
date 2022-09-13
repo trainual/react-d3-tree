@@ -1,7 +1,7 @@
 import React, { SyntheticEvent } from 'react';
-import { HierarchyPointNode } from 'd3-hierarchy';
-import { Orientation, TreeLinkDatum, PathFunctionOption, PathFunction, TreeNodeDatum, PathClassFunction } from '../types/common';
-declare type LinkEventHandler = (source: HierarchyPointNode<TreeNodeDatum>, target: HierarchyPointNode<TreeNodeDatum>, evt: SyntheticEvent) => void;
+import { Orientation, TreeLinkDatum, PathFunctionOption, PathFunction, PathClassFunction, TreeNode } from '../types/common';
+import { CompactLayoutConfiguration } from "../CompactLayout/CompactLayoutConfiguration";
+declare type LinkEventHandler = (source: TreeNode, target: TreeNode, evt: SyntheticEvent) => void;
 interface LinkProps {
     linkData: TreeLinkDatum;
     orientation: Orientation;
@@ -12,6 +12,8 @@ interface LinkProps {
     onClick: LinkEventHandler;
     onMouseOver: LinkEventHandler;
     onMouseOut: LinkEventHandler;
+    compact: boolean;
+    compactLayout: CompactLayoutConfiguration;
 }
 declare type LinkState = {
     initialStyle: {

@@ -1,8 +1,8 @@
-import { HierarchyPointNode } from 'd3-hierarchy';
 import { SyntheticEvent } from 'react';
-import { Orientation, PathClassFunction, PathFunction, PathFunctionOption, Point, RawNodeDatum, RenderCustomNodeElementFn, TreeNodeDatum } from '../types/common';
-export declare type TreeNodeEventCallback = (node: HierarchyPointNode<TreeNodeDatum>, event: SyntheticEvent) => any;
-export declare type TreeLinkEventCallback = (sourceNode: HierarchyPointNode<TreeNodeDatum>, targetNode: HierarchyPointNode<TreeNodeDatum>, event: SyntheticEvent) => any;
+import { Orientation, PathClassFunction, PathFunction, PathFunctionOption, Point, RawNodeDatum, RenderCustomNodeElementFn, TreeNode, TreeNodeDatum } from '../types/common';
+import { CompactLayoutConfiguration } from "../CompactLayout/CompactLayoutConfiguration";
+export declare type TreeNodeEventCallback = (node: TreeNode, event: SyntheticEvent) => any;
+export declare type TreeLinkEventCallback = (sourceNode: TreeNode, targetNode: TreeNode, event: SyntheticEvent) => any;
 /**
  * Props accepted by the `Tree` component.
  *
@@ -75,6 +75,10 @@ export interface TreeProps {
         zoom: number;
         translate: Point;
     }) => any;
+    /**
+     * TODO: Docs
+     */
+    compact?: boolean;
     /**
      * Determines along which axis the tree is oriented.
      *
@@ -264,4 +268,8 @@ export interface TreeProps {
      * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
      */
     hasInteractiveNodes?: boolean;
+    /**
+     * Allows overriding the configuration used by the compact layout.
+     */
+    compactLayout?: CompactLayoutConfiguration;
 }

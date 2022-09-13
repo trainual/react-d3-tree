@@ -1,5 +1,6 @@
 import { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
+import { CompactLayoutConfiguration } from "../CompactLayout/CompactLayoutConfiguration";
 export declare type Orientation = 'horizontal' | 'vertical';
 export interface Point {
     x: number;
@@ -10,20 +11,32 @@ export interface RawNodeDatum {
     attributes?: Record<string, string | number | boolean>;
     children?: RawNodeDatum[];
 }
+export interface CompactState {
+    firstCompact?: boolean;
+    compactEven?: boolean;
+    flexCompactDim?: [number, number] | null | undefined;
+    firstCompactNode?: TreeNode;
+    row?: number;
+}
 export interface TreeNodeDatum extends RawNodeDatum {
     children?: TreeNodeDatum[];
     __rd3t: {
         id: string;
         depth: number;
         collapsed: boolean;
+        compact: CompactState;
     };
 }
+export declare type TreeNode = HierarchyPointNode<TreeNodeDatum> & {
+    height?: number;
+    width?: number;
+};
 export interface TreeLinkDatum {
     source: HierarchyPointNode<TreeNodeDatum>;
     target: HierarchyPointNode<TreeNodeDatum>;
 }
 export declare type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
-export declare type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => string;
+export declare type PathFunction = (link: TreeLinkDatum, orientation: Orientation, compact: boolean, layout: CompactLayoutConfiguration) => string;
 export declare type PathClassFunction = PathFunction;
 export declare type SyntheticEventHandler = (evt: SyntheticEvent) => void;
 /**
