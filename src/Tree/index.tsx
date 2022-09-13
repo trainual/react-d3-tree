@@ -442,16 +442,13 @@ class Tree extends React.Component<TreeProps, TreeState> {
       this.compactLayout = { ...VerticalDefaultLayout, ...this.props.compactLayout,};
     }
     else {
-      this.compactLayout = {...this.props.compactLayout, ...HorizontalDefaultLayout};
+      this.compactLayout = {...HorizontalDefaultLayout, ...this.props.compactLayout};
     }
 
     const layout = flextree<TreeNodeDatum>({
       nodeSize: node => {
         const {x, y} = nodeSize;
-
         if(compact) {
-          Object.assign(node, {width: x, height: y})
-
           return this.compactLayout.nodeFlexSize({
             compact: true,
             node: node,
@@ -473,7 +470,10 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const tree = layout.hierarchy(this.state.data[0], d => (d.__rd3t.collapsed ? null : d.children));
     const rootNode = tree as unknown as HierarchyPointNode<any>;
 
-    layout(tree);
+    rootNode.each((node, i, arr) => {
+      const {x, y} = nodeSize;
+      Object.assign(node, {width: x, height: y})
+    });
 
     if(compact) {
       calculateCompactFlexDimensions(rootNode, this.compactLayout);
