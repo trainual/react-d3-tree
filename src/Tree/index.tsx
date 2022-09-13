@@ -451,18 +451,24 @@ class Tree extends React.Component<TreeProps, TreeState> {
         const siblingsMargin = 20
         const childrenMargin = 20
 
-        Object.assign(node, { width: x, height: y })
+        if(compact) {
+          Object.assign(node, {width: x, height: y})
 
-        return this.compactLayout.nodeFlexSize({
-          compact: true,
-          node: node,
-          width: x,
-          height: y,
-          siblingsMargin,
-          childrenMargin
-        });
+          return this.compactLayout.nodeFlexSize({
+            compact: true,
+            node: node,
+            width: x,
+            height: y,
+            siblingsMargin,
+            childrenMargin
+          });
+        }
+        else {
+          return [x, y];
+        }
       }
-    }).spacing((a, b) =>
+    })
+      .spacing((a, b) =>
         a.parent.data.__rd3t.id === b.parent.data.__rd3t.id
           ? separation.siblings
           : separation.nonSiblings
