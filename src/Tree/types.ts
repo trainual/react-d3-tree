@@ -185,6 +185,13 @@ export interface TreeProps {
   collapsible?: boolean;
 
   /**
+   * Determines whether the to collapse children when a node is toggled closed.
+   *
+   * {@link Tree.defaultProps.collapseChildrenOnToggle | Default value}
+   */
+  collapseChildrenOnToggle?: boolean;
+
+  /**
    * Sets the maximum node depth to which the tree is expanded on its initial render.
    *
    * By default, the tree renders to full depth.

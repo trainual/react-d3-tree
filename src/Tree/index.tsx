@@ -37,6 +37,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
     transitionDuration: 500,
     depthFactor: undefined,
     collapsible: true,
+    collapseChildrenOnToggle: true,
     initialDepth: undefined,
     zoomable: true,
     zoom: 1,
@@ -247,11 +248,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
    *
    * @static
    */
-  static collapseNode(nodeDatum: TreeNodeDatum) {
+  static collapseNode(nodeDatum: TreeNodeDatum, collapseChildrenOnToggle: boolean) {
     nodeDatum.__rd3t.collapsed = true;
-    if (nodeDatum.children && nodeDatum.children.length > 0) {
+    if (collapseChildrenOnToggle && nodeDatum.children && nodeDatum.children.length > 0) {
       nodeDatum.children.forEach(child => {
-        Tree.collapseNode(child);
+        Tree.collapseNode(child, collapseChildrenOnToggle);
       });
     }
   }
@@ -269,11 +270,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
   /**
    * Collapses all nodes in `nodeSet` that are neighbors (same depth) of `targetNode`.
    */
-  collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[]) {
+  collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[], collapseChildrenOnToggle: boolean) {
     const neighbors = this.findNodesAtDepth(targetNode.__rd3t.depth, nodeSet, []).filter(
       node => node.__rd3t.id !== targetNode.__rd3t.id
     );
-    neighbors.forEach(neighbor => Tree.collapseNode(neighbor));
+    neighbors.forEach(neighbor => Tree.collapseNode(neighbor, collapseChildrenOnToggle));
   }
 
   /**
@@ -291,9 +292,9 @@ class Tree extends React.Component<TreeProps, TreeState> {
     if (this.props.collapsible && !this.state.isTransitioning) {
       if (targetNodeDatum.__rd3t.collapsed) {
         Tree.expandNode(targetNodeDatum);
-        this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNodeDatum, data);
+        this.props.shouldCollapseNeighborNodes && this.collapseNeighborNodes(targetNodeDatum, data, this.props.collapseChildrenOnToggle);
       } else {
-        Tree.collapseNode(targetNodeDatum);
+        Tree.collapseNode(targetNodeDatum, this.props.collapseChildrenOnToggle);
       }
 
       if (this.props.enableLegacyTransitions) {

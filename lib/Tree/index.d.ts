@@ -59,7 +59,7 @@ declare class Tree extends React.Component<TreeProps, TreeState> {
      *
      * @static
      */
-    static collapseNode(nodeDatum: TreeNodeDatum): void;
+    static collapseNode(nodeDatum: TreeNodeDatum, collapseChildrenOnToggle: boolean): void;
     /**
      * Sets the internal `collapsed` property of
      * the passed `TreeNodeDatum` object to `false`.
@@ -70,7 +70,7 @@ declare class Tree extends React.Component<TreeProps, TreeState> {
     /**
      * Collapses all nodes in `nodeSet` that are neighbors (same depth) of `targetNode`.
      */
-    collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[]): void;
+    collapseNeighborNodes(targetNode: TreeNodeDatum, nodeSet: TreeNodeDatum[], collapseChildrenOnToggle: boolean): void;
     /**
      * Finds the node matching `nodeId` and
      * expands/collapses it, depending on the current state of
