@@ -15,12 +15,12 @@ export interface CompactLayoutConfiguration {
     nodeFlexSize?: (params: NodeFlexSize) => number[];
     compactMarginPair?: (node: TreeNode) => number;
     compactMarginBetween?: () => number;
+    siblingsMargin: (node: TreeNode) => number;
+    childrenMargin: (node: TreeNode) => number;
 }
 interface NodeFlexSize {
     height: number;
     width: number;
-    siblingsMargin: number;
-    childrenMargin: number;
     compact: boolean;
     node: TreeNode;
 }

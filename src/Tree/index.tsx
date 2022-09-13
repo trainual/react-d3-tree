@@ -439,17 +439,15 @@ class Tree extends React.Component<TreeProps, TreeState> {
     const { isInitialRenderForDataset } = this.state;
 
     if(orientation === "vertical") {
-      this.compactLayout = VerticalDefaultLayout;
+      this.compactLayout = { ...VerticalDefaultLayout, ...this.props.compactLayout,};
     }
     else {
-      this.compactLayout = HorizontalDefaultLayout;
+      this.compactLayout = {...this.props.compactLayout, ...HorizontalDefaultLayout};
     }
 
     const layout = flextree<TreeNodeDatum>({
       nodeSize: node => {
         const {x, y} = nodeSize;
-        const siblingsMargin = 20
-        const childrenMargin = 20
 
         if(compact) {
           Object.assign(node, {width: x, height: y})
@@ -459,8 +457,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
             node: node,
             width: x,
             height: y,
-            siblingsMargin,
-            childrenMargin
           });
         }
         else {
@@ -468,12 +464,11 @@ class Tree extends React.Component<TreeProps, TreeState> {
         }
       }
     })
-      .spacing((a, b) =>
-        a.parent.data.__rd3t.id === b.parent.data.__rd3t.id
-          ? separation.siblings
-          : separation.nonSiblings
-      );
-
+    .spacing((a, b) =>
+      a.parent.data.__rd3t.id === b.parent.data.__rd3t.id
+        ? separation.siblings
+        : separation.nonSiblings
+    );
 
     const tree = layout.hierarchy(this.state.data[0], d => (d.__rd3t.collapsed ? null : d.children));
     const rootNode = tree as unknown as HierarchyPointNode<any>;

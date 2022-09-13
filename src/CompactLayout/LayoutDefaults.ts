@@ -1,4 +1,5 @@
 import {CompactLayoutConfiguration} from "./CompactLayoutConfiguration";
+import {TreeNode} from "../types/common";
 
 export const VerticalDefaultLayout: CompactLayoutConfiguration = {
   linkCompactXStart: node => node.x + (node.data.__rd3t.compact.compactEven ? node.width / 2 : -node.width / 2),
@@ -16,15 +17,17 @@ export const VerticalDefaultLayout: CompactLayoutConfiguration = {
   linkY: node => node.y,
   linkParentX: node => node.x,
   linkParentY: node => node.y + node.height,
-  nodeFlexSize: ({ height, width, siblingsMargin, childrenMargin, compact, node }): [number, number] => {
+  nodeFlexSize: function({ height, width, compact, node }): [number, number] {
     const compactState = node.data.__rd3t.compact;
     if (compact && compactState.flexCompactDim) {
       return [compactState.flexCompactDim[0], compactState.flexCompactDim[1]];
     };
-    return [width + siblingsMargin, height + childrenMargin];
+    return [width + this.siblingsMargin(node), height + this.childrenMargin(node)];
   },
   compactMarginPair: node => 100,
   compactMarginBetween: () => 20,
+  siblingsMargin: (node) => 50,
+  childrenMargin: (node) => 50,
 };
 
 export const HorizontalDefaultLayout: CompactLayoutConfiguration = {
@@ -42,13 +45,15 @@ export const HorizontalDefaultLayout: CompactLayoutConfiguration = {
     sizeColumn: node => node.height,
     sizeRow: node => node.width,
   },
-  nodeFlexSize: ({ height, width, siblingsMargin, childrenMargin, compact, node }) => {
+  nodeFlexSize: function({ height, width, compact, node }) {
     if (compact && node.data.__rd3t.compact.flexCompactDim) {
       const result = [node.data.__rd3t.compact.flexCompactDim[0], node.data.__rd3t.compact.flexCompactDim[1]]
       return result;
     };
-    return [height + siblingsMargin, width + childrenMargin]
+    return [height + this.siblingsMargin(node), width + this.childrenMargin(node)]
   },
   compactMarginPair: node => 100,
   compactMarginBetween: () => 20,
+  siblingsMargin: (node) => 50,
+  childrenMargin: (node) => 50,
 };
