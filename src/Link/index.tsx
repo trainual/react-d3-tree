@@ -1,19 +1,18 @@
 import React, { SyntheticEvent } from 'react';
 import { linkHorizontal, linkVertical } from 'd3-shape';
-import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import {
   Orientation,
   TreeLinkDatum,
   PathFunctionOption,
   PathFunction,
-  TreeNodeDatum,
-  PathClassFunction,
+  PathClassFunction, TreeNode,
 } from '../types/common';
+import {CompactLayoutConfiguration} from "../CompactLayout/CompactLayoutConfiguration";
 
 type LinkEventHandler = (
-  source: HierarchyPointNode<TreeNodeDatum>,
-  target: HierarchyPointNode<TreeNodeDatum>,
+  source: TreeNode,
+  target: TreeNode,
   evt: SyntheticEvent
 ) => void;
 
@@ -27,6 +26,8 @@ interface LinkProps {
   onClick: LinkEventHandler;
   onMouseOver: LinkEventHandler;
   onMouseOut: LinkEventHandler;
+  compact: boolean;
+  compactLayout: CompactLayoutConfiguration;
 }
 
 type LinkState = {
@@ -103,10 +104,10 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   }
 
   drawPath() {
-    const { linkData, orientation, pathFunc } = this.props;
+    const { linkData, orientation, pathFunc, compact, compactLayout } = this.props;
 
     if (typeof pathFunc === 'function') {
-      return pathFunc(linkData, orientation);
+      return pathFunc(linkData, orientation, compact, compactLayout);
     }
     if (pathFunc === 'elbow') {
       return this.drawElbowPath(linkData, orientation);
@@ -121,11 +122,11 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
   }
 
   getClassNames() {
-    const { linkData, orientation, pathClassFunc } = this.props;
+    const { linkData, orientation, pathClassFunc, compact, compactLayout } = this.props;
     const classNames = ['rd3t-link'];
 
     if (typeof pathClassFunc === 'function') {
-      classNames.push(pathClassFunc(linkData, orientation));
+      classNames.push(pathClassFunc(linkData, orientation, compact, compactLayout));
     }
 
     return classNames.join(' ').trim();

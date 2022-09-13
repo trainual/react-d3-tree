@@ -7,18 +7,19 @@ import {
   PathFunctionOption,
   Point,
   RawNodeDatum,
-  RenderCustomNodeElementFn,
+  RenderCustomNodeElementFn, TreeNode,
   TreeNodeDatum,
 } from '../types/common';
+import {CompactLayoutConfiguration} from "../CompactLayout/CompactLayoutConfiguration";
 
 export type TreeNodeEventCallback = (
-  node: HierarchyPointNode<TreeNodeDatum>,
+  node: TreeNode,
   event: SyntheticEvent
 ) => any;
 
 export type TreeLinkEventCallback = (
-  sourceNode: HierarchyPointNode<TreeNodeDatum>,
-  targetNode: HierarchyPointNode<TreeNodeDatum>,
+  sourceNode: TreeNode,
+  targetNode: TreeNode,
   event: SyntheticEvent
 ) => any;
 
@@ -98,6 +99,11 @@ export interface TreeProps {
    * {@link Tree.defaultProps.onUpdate | Default value}
    */
   onUpdate?: (target: { node: TreeNodeDatum | null; zoom: number; translate: Point }) => any;
+
+  /**
+   * TODO: Docs
+   */
+  compact?: boolean;
 
   /**
    * Determines along which axis the tree is oriented.
@@ -310,4 +316,9 @@ export interface TreeProps {
    * {@link Tree.defaultProps.hasInteractiveNodes | Default value}
    */
   hasInteractiveNodes?: boolean;
+
+  /**
+   * Allows overriding the configuration used by the compact layout.
+   */
+  compactLayout?: CompactLayoutConfiguration
 }

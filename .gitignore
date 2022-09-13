@@ -37,3 +37,5 @@ stats.json
 dist
 demo/build
 demo/public/docs
+
+.DS_Store
