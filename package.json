@@ -1,6 +1,6 @@
 {
   "name": "react-d3-tree",
-  "version": "4.0.0",
+  "version": "3.3.5",
   "description": "React component to create interactive D3 tree hierarchies",
   "author": "Ben Kremer",
   "license": "MIT",
@@ -43,11 +43,6 @@
     "d3-visualization",
     "chart"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "src/**/*.js": [
       "eslint",
