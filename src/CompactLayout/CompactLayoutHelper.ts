@@ -49,7 +49,7 @@ export const calculateCompactFlexDimensions = (root: TreeNode, compactLayout: Co
       const oddMaxColumnDimension = d3Max<any, number>(compactChildren.filter(node=> !node.data.__rd3t.compact.compactEven), compactLayout.compactDimension.sizeColumn);
       const columnSize = Math.max(evenMaxColumnDimension, oddMaxColumnDimension) * 2;
 
-      const rowsMapNew = this.groupBy(compactChildren,
+      const rowsMapNew = groupBy(compactChildren,
         node => node.data.__rd3t.compact.row,
         (reducedGroup: Iterable<TreeNode>) => d3Max(reducedGroup, (node: TreeNode) => compactLayout.compactDimension.sizeRow(node) + compactLayout.compactMarginBetween()));
 
@@ -101,7 +101,7 @@ export const calculateCompactFlexPositions = (root: TreeNode, compactLayout: Com
         compactChildren.forEach(d => d.x += offsetX);
       }
 
-      const rowsMapNew = this.groupBy(compactChildren,
+      const rowsMapNew = groupBy(compactChildren,
         (node: TreeNode) => node.data.__rd3t.compact.row,
         reducedGroup => d3Max(reducedGroup, (node: TreeNode) => compactLayout.compactDimension.sizeRow(node)));
 
