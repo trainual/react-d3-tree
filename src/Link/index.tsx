@@ -6,7 +6,7 @@ import {
   TreeLinkDatum,
   PathFunctionOption,
   PathFunction,
-  PathClassFunction, TreeNode,
+  PathClassFunction, TreeNode, Point,
 } from '../types/common';
 import {CompactLayoutConfiguration} from "../CompactLayout/CompactLayoutConfiguration";
 
@@ -103,6 +103,67 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
       : `M${linkData.source.x},${linkData.source.y}V${linkData.target.y}H${linkData.target.x}`;
   }
 
+  drawSmoothStepPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation'], compactLayout: CompactLayoutConfiguration) {
+    const n = linkData.target.data.__rd3t.compact.flexCompactDim
+      ? {
+        x: compactLayout.compactLinkMidX(linkData.target),
+        y: compactLayout.compactLinkMidY(linkData.target),
+      }
+      : {
+        x: compactLayout.linkX(linkData.target),
+        y: compactLayout.linkY(linkData.target),
+      };
+
+    const p = {
+      x: compactLayout.linkParentX(linkData.source),
+      y: compactLayout.linkParentY(linkData.source),
+    };
+
+    const m = linkData.target.data.__rd3t.compact.flexCompactDim
+      ? {
+        x: compactLayout.linkCompactXStart(linkData.target),
+        y: compactLayout.linkCompactYStart(linkData.target),
+      }
+      : n;
+    return this.getSmoothPathSvg(n, p, m);
+  }
+
+  getSmoothPathSvg(s: Point, t: Point, m: Point): string {
+    const x = s.x;
+    const y = s.y;
+    const ex = t.x;
+    const ey = t.y;
+
+    const mx = (m && m.x) || x;
+    const my = (m && m.y) || y;
+
+    const xrvs = ex - x < 0 ? -1 : 1;
+    const yrvs = ey - y < 0 ? -1 : 1;
+
+    const rdef = 35;
+    let r = Math.abs(ex - x) / 2 < rdef ? Math.abs(ex - x) / 2 : rdef;
+
+    r = Math.abs(ey - y) / 2 < r ? Math.abs(ey - y) / 2 : r;
+
+    const h = Math.abs(ey - y) / 2 - r;
+    const w = Math.abs(ex - x) - r * 2;
+    const path = `
+                    M ${mx} ${my}
+                    L ${x} ${my}
+                    L ${x} ${y}
+                    L ${x} ${y + h * yrvs}
+                    C  ${x} ${y + h * yrvs + r * yrvs} ${x} ${y + h * yrvs + r * yrvs} ${
+      x + r * xrvs
+    } ${y + h * yrvs + r * yrvs}
+                    L ${x + w * xrvs + r * xrvs} ${y + h * yrvs + r * yrvs}
+                    C  ${ex}  ${y + h * yrvs + r * yrvs} ${ex}  ${y + h * yrvs + r * yrvs} ${ex} ${
+      ey - h * yrvs
+    }
+                    L ${ex} ${ey}`;
+
+    return path;
+  }
+
   drawPath() {
     const { linkData, orientation, pathFunc, compact, compactLayout } = this.props;
 
@@ -117,6 +178,9 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     }
     if (pathFunc === 'step') {
       return this.drawStepPath(linkData, orientation);
+    }
+    if (pathFunc === 'rounded-step') {
+      return this.drawSmoothStepPath(linkData, orientation, compactLayout);
     }
     return this.drawDiagonalPath(linkData, orientation);
   }

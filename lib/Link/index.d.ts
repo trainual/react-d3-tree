@@ -1,5 +1,5 @@
 import React, { SyntheticEvent } from 'react';
-import { Orientation, TreeLinkDatum, PathFunctionOption, PathFunction, PathClassFunction, TreeNode } from '../types/common';
+import { Orientation, TreeLinkDatum, PathFunctionOption, PathFunction, PathClassFunction, TreeNode, Point } from '../types/common';
 import { CompactLayoutConfiguration } from "../CompactLayout/CompactLayoutConfiguration";
 declare type LinkEventHandler = (source: TreeNode, target: TreeNode, evt: SyntheticEvent) => void;
 interface LinkProps {
@@ -34,6 +34,8 @@ export default class Link extends React.PureComponent<LinkProps, LinkState> {
     drawDiagonalPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']): string;
     drawStraightPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']): string;
     drawElbowPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation']): string;
+    drawSmoothStepPath(linkData: LinkProps['linkData'], orientation: LinkProps['orientation'], compactLayout: CompactLayoutConfiguration): string;
+    getSmoothPathSvg(s: Point, t: Point, m: Point): string;
     drawPath(): string;
     getClassNames(): string;
     handleOnClick: (evt: any) => void;

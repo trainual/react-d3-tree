@@ -35,7 +35,7 @@ export interface TreeLinkDatum {
     source: HierarchyPointNode<TreeNodeDatum>;
     target: HierarchyPointNode<TreeNodeDatum>;
 }
-export declare type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
+export declare type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step' | 'rounded-step';
 export declare type PathFunction = (link: TreeLinkDatum, orientation: Orientation, compact: boolean, layout: CompactLayoutConfiguration) => string;
 export declare type PathClassFunction = PathFunction;
 export declare type SyntheticEventHandler = (evt: SyntheticEvent) => void;

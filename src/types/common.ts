@@ -44,7 +44,7 @@ export interface TreeLinkDatum {
   target: HierarchyPointNode<TreeNodeDatum>;
 }
 
-export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
+export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step' | 'rounded-step'
 export type PathFunction = (link: TreeLinkDatum, orientation: Orientation, compact: boolean, layout: CompactLayoutConfiguration) => string;
 export type PathClassFunction = PathFunction;
 
