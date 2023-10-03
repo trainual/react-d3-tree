@@ -35,6 +35,7 @@ stats.json
 
 # Build outputs
 dist
-lib
 demo/build
 demo/public/docs
+
+.DS_Store

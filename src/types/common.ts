@@ -1,5 +1,6 @@
 import { SyntheticEvent } from 'react';
 import { HierarchyPointNode } from 'd3-hierarchy';
+import {CompactLayoutConfiguration} from "../CompactLayout/CompactLayoutConfiguration";
 
 export type Orientation = 'horizontal' | 'vertical';
 
@@ -14,13 +15,28 @@ export interface RawNodeDatum {
   children?: RawNodeDatum[];
 }
 
+export interface CompactState {
+  firstCompact?: boolean
+  compactEven?: boolean
+  flexCompactDim?: [number, number] | null | undefined
+  firstCompactNode?: TreeNode
+  row?: number
+}
+
 export interface TreeNodeDatum extends RawNodeDatum {
   children?: TreeNodeDatum[];
   __rd3t: {
     id: string;
     depth: number;
     collapsed: boolean;
+    compact: CompactState
   };
+}
+
+export type TreeNode = HierarchyPointNode<TreeNodeDatum> &
+{
+  height?: number
+  width?: number
 }
 
 export interface TreeLinkDatum {
@@ -28,8 +44,8 @@ export interface TreeLinkDatum {
   target: HierarchyPointNode<TreeNodeDatum>;
 }
 
-export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step';
-export type PathFunction = (link: TreeLinkDatum, orientation: Orientation) => string;
+export type PathFunctionOption = 'diagonal' | 'elbow' | 'straight' | 'step' | 'rounded-step'
+export type PathFunction = (link: TreeLinkDatum, orientation: Orientation, compact: boolean, layout: CompactLayoutConfiguration) => string;
 export type PathClassFunction = PathFunction;
 
 export type SyntheticEventHandler = (evt: SyntheticEvent) => void;
@@ -46,7 +62,7 @@ export interface CustomNodeElementProps {
    * The D3 `HierarchyPointNode` representation of the node, which wraps `nodeDatum`
    * with additional properties.
    */
-  hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>;
+  hierarchyPointNode: TreeNode;
   /**
    * Toggles the expanded/collapsed state of the node.
    *

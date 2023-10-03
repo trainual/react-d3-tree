@@ -1,20 +1,19 @@
 import React, { SyntheticEvent } from 'react';
-import { HierarchyPointNode } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 
-import { Orientation, Point, TreeNodeDatum, RenderCustomNodeElementFn } from '../types/common';
+import {Orientation, Point, TreeNodeDatum, RenderCustomNodeElementFn, TreeNode} from '../types/common';
 import DefaultNodeElement from './DefaultNodeElement';
 
 type NodeEventHandler = (
-  hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>,
+  hierarchyPointNode: TreeNode,
   evt: SyntheticEvent
 ) => void;
 
 type NodeProps = {
   data: TreeNodeDatum;
   position: Point;
-  hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>;
-  parent: HierarchyPointNode<TreeNodeDatum> | null;
+  hierarchyPointNode: TreeNode;
+  parent: TreeNode | null;
   nodeClassName: string;
   nodeSize: {
     x: number;
@@ -29,7 +28,7 @@ type NodeProps = {
   onNodeMouseOver: NodeEventHandler;
   onNodeMouseOut: NodeEventHandler;
   subscriptions: object;
-  centerNode: (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => void;
+  centerNode: (hierarchyPointNode: TreeNode) => void;
 };
 
 type NodeState = {
